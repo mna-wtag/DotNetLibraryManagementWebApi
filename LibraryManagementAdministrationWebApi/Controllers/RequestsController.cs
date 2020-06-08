@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using LibraryManagementAdministrationWebApi.Models;
+using DotNetLibraryManagementWebApi.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-namespace LibraryManagementAdministrationWebApi.Controllers
+namespace DotNetLibraryManagementWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -23,15 +25,16 @@ namespace LibraryManagementAdministrationWebApi.Controllers
 
         // GET: api/Requests
         [HttpGet]
-        [Authorize(Roles = "Admin,SuperAdmin,UpdateAdmin")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Request>>> GetRequest()
         {
-            return await _context.Request.ToListAsync();
+            var requests = _context.Request.Include(r => r.Book).Include(r => r.User);
+            return await requests.ToListAsync();
         }
 
         // GET: api/Requests/5
         [HttpGet("{token}")]
-        [Authorize(Roles = "Admin,SuperAdmin,UpdateAdmin")]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<ActionResult<Request>> GetRequest(String token)
         {
             var request = await _context.Request.FirstOrDefaultAsync(a=> a.RequestToken.Equals(token));
@@ -48,14 +51,43 @@ namespace LibraryManagementAdministrationWebApi.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        [Authorize(Roles ="Admin,SuperAdmin,UpdateAdmin")]
-        public async Task<IActionResult> PutRequest(int id, Request request)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,Roles = "Admin,SuperAdmin,UpdateAdmin")]
+        public async Task<IActionResult> PutRequest(int id, [FromBody]int flag)
         {
-            if (id != request.RequestId)
+            var request = await _context.Request.FirstOrDefaultAsync(a=> a.RequestId == id);
+            if (request == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
+            #region Execute SP
+            string adminId = null;
+            // var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var claims = User.Claims;
+            if (claims != null)
+            {
+                adminId = claims.FirstOrDefault(x => x.Type =="AdminId").Value;
+                    //identity.Claims.FirstOrDefault(x => x.ClaimType == "AdminId").Value;
+            }
+
+            try
+            {
+                var result = _context.Database.
+                            ExecuteSqlCommand(
+                           "[dbo].[ProcessBookCheckOutRequest] @requestToken = {0}, @adminId = {1}, @flag = {2}",
+                            request.RequestToken,
+                            adminId,
+                            flag
+                            );
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            #endregion
+
+            #region old code
+            /*
             _context.Entry(request).State = EntityState.Modified;
 
             try
@@ -72,7 +104,8 @@ namespace LibraryManagementAdministrationWebApi.Controllers
                 {
                     throw;
                 }
-            }
+            }*/
+            #endregion
 
             return NoContent();
         }

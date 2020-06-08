@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LibraryManagementAdministrationWebApi.Models
+namespace DotNetLibraryManagementWebApi.Models
 {
     public partial class LibraryUser
     {

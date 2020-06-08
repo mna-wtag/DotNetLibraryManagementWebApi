@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace LibraryManagementAdministrationWebApi.Controllers
+namespace DotNetLibraryManagementWebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]

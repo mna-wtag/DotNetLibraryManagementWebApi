@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using LibraryManagementAdministrationWebApi.Models;
+using DotNetLibraryManagementWebApi.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace LibraryManagementAdministrationWebApi.Controllers
+
+namespace DotNetLibraryManagementWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -23,7 +24,7 @@ namespace LibraryManagementAdministrationWebApi.Controllers
 
         // GET: api/Publishers
         [HttpGet]
-        [Authorize(Roles = "Admin,SuperAdmin,UpdateAdmin")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Publisher>>> GetPublisher()
         {
             return await _context.Publisher.ToListAsync();
@@ -31,7 +32,7 @@ namespace LibraryManagementAdministrationWebApi.Controllers
 
         // GET: api/Publishers/5
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,SuperAdmin,UpdateAdmin")]
+        [Authorize(Roles ="Admin,SuperAdmin")]
         public async Task<ActionResult<Publisher>> GetPublisher(int id)
         {
             var publisher = await _context.Publisher.FindAsync(id);
@@ -92,7 +93,7 @@ namespace LibraryManagementAdministrationWebApi.Controllers
 
         // DELETE: api/Publishers/5
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<ActionResult<Publisher>> DeletePublisher(int id)
         {
             var publisher = await _context.Publisher.FindAsync(id);

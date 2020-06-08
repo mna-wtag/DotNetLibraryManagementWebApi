@@ -1,6 +1,6 @@
 using System;
 
-namespace LibraryManagementAdministrationWebApi
+namespace DotNetLibraryManagementWebApi
 {
     public class WeatherForecast
     {

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace LibraryManagementAdministrationWebApi.Models
+namespace DotNetLibraryManagementWebApi.Models
 {
     public partial class LibraryManagementContext : DbContext
     {
@@ -88,13 +88,9 @@ namespace LibraryManagementAdministrationWebApi.Models
 
                 entity.Property(e => e.PassportNo).HasMaxLength(100);
 
-                entity.Property(e => e.Uname)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                entity.Property(e => e.Uname).HasMaxLength(100);
 
-                entity.Property(e => e.Upassword)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                entity.Property(e => e.Upassword).HasMaxLength(100);
 
                 entity.HasOne(d => d.AdminLevelNavigation)
                     .WithMany(p => p.Administrator)
@@ -276,6 +272,8 @@ namespace LibraryManagementAdministrationWebApi.Models
             {
                 entity.Property(e => e.PublisherId).HasColumnName("PublisherID");
 
+                entity.Property(e => e.Address).HasMaxLength(200);
+
                 entity.Property(e => e.City)
                     .IsRequired()
                     .HasMaxLength(100);
@@ -284,7 +282,7 @@ namespace LibraryManagementAdministrationWebApi.Models
                     .IsRequired()
                     .HasMaxLength(100);
 
-                entity.Property(e => e.PuilisherName)
+                entity.Property(e => e.PublisherName)
                     .IsRequired()
                     .HasMaxLength(100);
 
@@ -294,6 +292,12 @@ namespace LibraryManagementAdministrationWebApi.Models
             modelBuilder.Entity<Request>(entity =>
             {
                 entity.Property(e => e.BookId).HasColumnName("BookID");
+
+                entity.Property(e => e.BookReturnTime).HasColumnType("datetime");
+
+                entity.Property(e => e.ProcessTime).HasColumnType("datetime");
+
+                entity.Property(e => e.RequestTime).HasColumnType("datetime");
 
                 entity.Property(e => e.RequestToken).HasMaxLength(100);
 

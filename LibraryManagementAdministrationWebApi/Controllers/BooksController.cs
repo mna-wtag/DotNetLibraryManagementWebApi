@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using LibraryManagementAdministrationWebApi.Models;
 using Microsoft.AspNetCore.Authorization;
+using DotNetLibraryManagementWebApi.Models;
+using Book = DotNetLibraryManagementWebApi.Models.Book;
 
-namespace LibraryManagementAdministrationWebApi.Controllers
+namespace DotNetLibraryManagementWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -26,7 +27,8 @@ namespace LibraryManagementAdministrationWebApi.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<Book>>> GetBook()
         {
-            return await _context.Book.ToListAsync();
+            var bookList = _context.Book.Include(b => b.Auth).Include(b => b.Pub);
+            return await bookList.ToListAsync();
         }
 
         // GET: api/Books/5
@@ -92,7 +94,7 @@ namespace LibraryManagementAdministrationWebApi.Controllers
 
         // DELETE: api/Books/5
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin,SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<ActionResult<Book>> DeleteBook(int id)
         {
             var book = await _context.Book.FindAsync(id);

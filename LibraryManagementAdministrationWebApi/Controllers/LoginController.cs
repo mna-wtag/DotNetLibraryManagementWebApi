@@ -4,15 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using LibraryManagementAdministrationWebApi.Models;
+using DotNetLibraryManagementWebApi.Models;
 using Microsoft.EntityFrameworkCore;
-using LibraryManagementAdministrationWebApi.Helpers;
+using DotNetLibraryManagementWebApi.Helpers;
 using Microsoft.Extensions.Configuration;
 using System.Runtime.CompilerServices;
-using LibraryManagementAdministrationWebApi.Helpers.LibraryManagement.Helpers;
+using DotNetLibraryManagementWebApi.Helpers.LibraryManagement.Helpers;
 using System.IO;
 
-namespace LibraryManagementAdministrationWebApi.Controllers
+namespace DotNetLibraryManagementWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -39,8 +39,15 @@ namespace LibraryManagementAdministrationWebApi.Controllers
 
                 if (admin != null)
                  {
-                    var adminRole = await _context.AdminRole.FirstOrDefaultAsync(a=> a.AdminLevel.ToString() == admin.AdminLevel.ToString());
-                    token = JwtHelper.GenrateJwtTokenForLibraryAdmin(admin.AdminId.ToString(),System.Convert.ToString(adminRole.AdminRole1), _config["Jwt:Key"]);
+                    var adminRole = 
+                        await _context.AdminRole.FirstOrDefaultAsync
+                        (a=> a.AdminLevel.ToString() == admin.AdminLevel.ToString());
+                    token = 
+                        JwtHelper.GenrateJwtTokenForLibraryAdmin(
+                            admin.AdminId.ToString(),
+                            System.Convert.ToString(adminRole.AdminRole1), 
+                            admin.FullName, 
+                            _config["Jwt:Key"]);
                     return Ok(new { token });
                 }
             }

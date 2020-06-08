@@ -1,4 +1,4 @@
-﻿using LibraryManagementAdministrationWebApi.Models;
+﻿using DotNetLibraryManagementWebApi.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Claims;
 using System;
@@ -10,14 +10,13 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace LibraryManagementAdministrationWebApi.Helpers
+namespace DotNetLibraryManagementWebApi.Helpers
 {
-
     //Helper Class for JWT Token Operations
     public static class JwtHelper
     {
-        //Geenrates JWT on given secrect key and user object
-        public static string GenrateJwtTokenForLibraryAdmin(string adminId, string adminRole, string secret)
+        //Generates JWT on given secrect key and user object
+        public static string GenrateJwtTokenForLibraryAdmin(string adminId, string adminRole, string adminName, string secret)
         {
             string tokenString = null;
 
@@ -28,6 +27,8 @@ namespace LibraryManagementAdministrationWebApi.Helpers
             var userClaims = new System.Security.Claims.Claim[]
                     {
                         new System.Security.Claims.Claim("AdminId", adminId),
+                        new System.Security.Claims.Claim("AdminName", adminName),
+                         new System.Security.Claims.Claim("AdminRole", adminRole),
                         new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Role, adminRole)
                     };
 

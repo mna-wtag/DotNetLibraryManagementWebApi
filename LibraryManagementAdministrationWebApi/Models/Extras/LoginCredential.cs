@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LibraryManagementAdministrationWebApi.Models
+namespace DotNetLibraryManagementWebApi.Models
 {
     public class LoginCredential
     {

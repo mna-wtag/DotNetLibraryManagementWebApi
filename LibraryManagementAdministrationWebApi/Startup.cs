@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using LibraryManagementAdministrationWebApi.Models;
+using DotNetLibraryManagementWebApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,8 +14,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
-namespace LibraryManagementAdministrationWebApi
+namespace DotNetLibraryManagementWebApi
 {
     public class Startup
     {
@@ -36,12 +38,11 @@ namespace LibraryManagementAdministrationWebApi
             services.AddDbContext<LibraryManagementContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DevEnvironmentConnectionString")));
 
-            //remove default json formatting
-            services.AddControllers().AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.PropertyNamingPolicy = null;
-                options.JsonSerializerOptions.DictionaryKeyPolicy = null;
-            });
+            //Add Newtonsoft JSON for referenceloophandling
+            services.AddMvc().AddNewtonsoftJson(options => {
+              options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+              options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+             });
 
             //add cors package
             services.AddCors();

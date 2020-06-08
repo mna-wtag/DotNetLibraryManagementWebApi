@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using LibraryManagementAdministrationWebApi.Models;
+using DotNetLibraryManagementWebApi.Models;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
+using DotNetLibraryManagementWebApi.Helpers.LibraryManagement.Helpers;
 
-namespace LibraryManagementAdministrationWebApi.Controllers
+namespace DotNetLibraryManagementWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles ="SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin")]
     public class AdministratorsController : ControllerBase
     {
         private readonly LibraryManagementContext _context;
@@ -55,6 +56,12 @@ namespace LibraryManagementAdministrationWebApi.Controllers
                 return BadRequest();
             }
 
+            var admin = await _context.Administrator.FirstOrDefaultAsync(a => a.AdminId == id);
+            if (admin.Upassword != administrator.Upassword)
+            {
+                administrator.Upassword = CryptoHelper.Hash(administrator.Upassword);
+            }
+
             _context.Entry(administrator).State = EntityState.Modified;
 
             try
@@ -80,9 +87,10 @@ namespace LibraryManagementAdministrationWebApi.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Administrator>> PostAdministrator([FromBody]Administrator administrator)
+        public async Task<ActionResult<Administrator>> PostAdministrator([Bind("FirstName,LastName,Nidno,PassportNo,Email,MobileNo,HomeAddress,City,Country,Uname,Upassword,AccountStatus,AdminLevel")]Administrator administrator)
         {
-            _context.Administrator.Add(administrator);
+            administrator.Upassword = CryptoHelper.Hash(administrator.Upassword);
+            _context.Administrator.Add(administrator); 
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetAdministrator", new { id = administrator.AdminId }, administrator);

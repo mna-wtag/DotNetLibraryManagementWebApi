@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using LibraryManagementAdministrationWebApi.Models;
+using DotNetLibraryManagementWebApi.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace LibraryManagementAdministrationWebApi.Controllers
+
+namespace DotNetLibraryManagementWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -32,7 +33,7 @@ namespace LibraryManagementAdministrationWebApi.Controllers
 
         // GET: api/LibraryUserRegistrationRequests/5
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,SuperAdmin,UpdateAdmin")]
+        [Authorize]
         public async Task<ActionResult<LibraryUserRegistrationRequest>> GetLibraryUserRegistrationRequest(int id)
         {
             var libraryUserRegistrationRequest = await _context.LibraryUserRegistrationRequest.FindAsync(id);

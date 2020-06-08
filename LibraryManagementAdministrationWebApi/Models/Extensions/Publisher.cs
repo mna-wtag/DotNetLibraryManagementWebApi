@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LibraryManagementAdministrationWebApi.Models.Extensions
+namespace DotNetLibraryManagementWebApi.Models.Extensions
 {
     [ModelMetadataType(typeof(PublisherMetaData))]
     public partial class Publisher

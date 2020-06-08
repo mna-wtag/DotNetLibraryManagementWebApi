@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using LibraryManagementAdministrationWebApi.Models;
+using DotNetLibraryManagementWebApi.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace LibraryManagementAdministrationWebApi.Controllers
+namespace DotNetLibraryManagementWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -23,15 +23,16 @@ namespace LibraryManagementAdministrationWebApi.Controllers
 
         // GET: api/Authors
         [HttpGet]
-        [Authorize(Roles ="Admin,SuperAdmin,UpdateAdmin")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Author>>> GetAuthor()
         {
-            return await _context.Author.ToListAsync();
+            var author = _context.Author.Include(a => a.Book);
+            return await author.ToArrayAsync();
         }
 
         // GET: api/Authors/5
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,SuperAdmin,UpdateAdmin")]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<ActionResult<Author>> GetAuthor(int id)
         {
             var author = await _context.Author.FindAsync(id);
@@ -94,7 +95,7 @@ namespace LibraryManagementAdministrationWebApi.Controllers
 
         // DELETE: api/Authors/5
         [HttpDelete("{id}")]
-       // [Authorize(Roles = "Admin,SuperAdmin,UpdateAdmin")]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<ActionResult<Author>> DeleteAuthor(int id)
         {
             var author = await _context.Author.FindAsync(id);

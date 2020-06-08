@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LibraryManagementAdministrationWebApi.Models
+namespace DotNetLibraryManagementWebApi.Models
 {
     public partial class Request
     {
@@ -11,6 +11,9 @@ namespace LibraryManagementAdministrationWebApi.Models
         public string Rstatus { get; set; }
         public int? ApprovedBy { get; set; }
         public string RequestToken { get; set; }
+        public DateTime? RequestTime { get; set; }
+        public DateTime? ProcessTime { get; set; }
+        public DateTime? BookReturnTime { get; set; }
 
         public virtual Administrator ApprovedByNavigation { get; set; }
         public virtual Book Book { get; set; }

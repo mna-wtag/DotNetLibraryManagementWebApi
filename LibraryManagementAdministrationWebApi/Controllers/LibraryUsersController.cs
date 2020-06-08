@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using LibraryManagementAdministrationWebApi.Models;
+using DotNetLibraryManagementWebApi.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace LibraryManagementAdministrationWebApi.Controllers
+namespace DotNetLibraryManagementWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -23,7 +23,7 @@ namespace LibraryManagementAdministrationWebApi.Controllers
 
         // GET: api/LibraryUsers
         [HttpGet]
-        [Authorize(Roles = "Admin,SuperAdmin,UpdateAdmin")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<LibraryUser>>> GetLibraryUser()
         {
             return await _context.LibraryUser.ToListAsync();
@@ -31,7 +31,7 @@ namespace LibraryManagementAdministrationWebApi.Controllers
 
         // GET: api/LibraryUsers/5
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,SuperAdmin,UpdateAdmin")]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<ActionResult<LibraryUser>> GetLibraryUser(int id)
         {
             var libraryUser = await _context.LibraryUser.FindAsync(id);
