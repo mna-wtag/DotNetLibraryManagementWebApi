@@ -25,10 +25,10 @@ namespace DotNetLibraryManagementWebApi.Models
         public string AccountStatus { get; set; }
         public string DateOfBirth { get; set; }
         public DateTime? ActiveOn { get; set; }
-        public int? ApproverBy { get; set; }
+        public int? Approver { get; set; }
         public int? ApplicationId { get; set; }
 
-        public virtual Administrator ApproverByNavigation { get; set; }
+        public virtual Administrator ApproverNavigation { get; set; }
         public virtual ICollection<Request> Request { get; set; }
     }
 }

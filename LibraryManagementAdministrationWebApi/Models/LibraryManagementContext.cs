@@ -208,9 +208,9 @@ namespace DotNetLibraryManagementWebApi.Models
                     .IsRequired()
                     .HasMaxLength(100);
 
-                entity.HasOne(d => d.ApproverByNavigation)
+                entity.HasOne(d => d.ApproverNavigation)
                     .WithMany(p => p.LibraryUser)
-                    .HasForeignKey(d => d.ApproverBy)
+                    .HasForeignKey(d => d.Approver)
                     .HasConstraintName("FK__LibraryUs__Appro__01142BA1");
             });
 
