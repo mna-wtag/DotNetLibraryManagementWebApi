@@ -23,7 +23,7 @@ namespace DotNetLibraryManagementWebApi.Controllers
 
         // GET: api/Authors
         [HttpGet]
-        [Authorize]
+       // [Authorize]
         public async Task<ActionResult<IEnumerable<Author>>> GetAuthor()
         {
             var author = _context.Author.Include(a => a.Book);
@@ -32,7 +32,7 @@ namespace DotNetLibraryManagementWebApi.Controllers
 
         // GET: api/Authors/5
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,SuperAdmin")]
+        //[Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<ActionResult<Author>> GetAuthor(int id)
         {
             var author = await _context.Author.FindAsync(id);

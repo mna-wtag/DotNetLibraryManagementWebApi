@@ -62,10 +62,11 @@ namespace DotNetLibraryManagementWebApi.Controllers
                 administrator.Upassword = CryptoHelper.Hash(administrator.Upassword);
             }
 
-            _context.Entry(administrator).State = EntityState.Modified;
+            // _context.Entry(administrator).State = EntityState.Modified;
 
             try
             {
+                _context.Entry(administrator).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -78,6 +79,10 @@ namespace DotNetLibraryManagementWebApi.Controllers
                 {
                     throw;
                 }
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
 
             return NoContent();
