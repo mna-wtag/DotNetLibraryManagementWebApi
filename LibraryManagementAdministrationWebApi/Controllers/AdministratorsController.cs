@@ -56,17 +56,27 @@ namespace DotNetLibraryManagementWebApi.Controllers
                 return BadRequest();
             }
 
-            var admin = await _context.Administrator.FirstOrDefaultAsync(a => a.AdminId == id);
-            if (admin.Upassword != administrator.Upassword)
-            {
-                administrator.Upassword = CryptoHelper.Hash(administrator.Upassword);
-            }
-
-            // _context.Entry(administrator).State = EntityState.Modified;
-
             try
             {
-                _context.Entry(administrator).State = EntityState.Modified;
+                var admin = await _context.Administrator.FirstOrDefaultAsync(a => a.AdminId == id);
+                if (admin.Upassword != administrator.Upassword)
+                {
+                    admin.Upassword = CryptoHelper.Hash(administrator.Upassword);
+                }
+
+                admin.FirstName = administrator.FirstName;
+                admin.LastName = administrator.LastName;
+                admin.HomeAddress = administrator.LastName;
+                admin.City = administrator.City;
+                admin.Country = administrator.Country;
+                admin.MobileNo = administrator.MobileNo;
+                admin.PassportNo = administrator.PassportNo;
+                admin.Email = administrator.Email;
+                admin.AdminLevel = administrator.AdminLevel;
+                admin.AccountStatus = administrator.AccountStatus;
+                admin.Nidno = administrator.Nidno;
+                admin.Uname = administrator.Uname;
+                
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -80,7 +90,7 @@ namespace DotNetLibraryManagementWebApi.Controllers
                     throw;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
