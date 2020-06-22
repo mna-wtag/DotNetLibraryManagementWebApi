@@ -13,7 +13,6 @@ namespace DotNetLibraryManagementWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class LibraryUserRegistrationRequestsController : ControllerBase
     {
         private readonly LibraryManagementContext _context;
@@ -25,7 +24,7 @@ namespace DotNetLibraryManagementWebApi.Controllers
 
         // GET: api/LibraryUserRegistrationRequests
         [HttpGet]
-        [Authorize(Roles = "Admin,SuperAdmin,UpdateAdmin")]
+        //[Authorize(Roles = "Admin,SuperAdmin,UpdateAdmin")]
         public async Task<ActionResult<IEnumerable<LibraryUserRegistrationRequest>>> GetLibraryUserRegistrationRequest()
         {
             return await _context.LibraryUserRegistrationRequest.ToListAsync();
@@ -51,31 +50,34 @@ namespace DotNetLibraryManagementWebApi.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin,SuperAdmin,UpdateAdmin")]
-        public async Task<IActionResult> PutLibraryUserRegistrationRequest(int id, LibraryUserRegistrationRequest libraryUserRegistrationRequest)
+        public async Task<IActionResult> PutLibraryUserRegistrationRequest(int id, [FromBody] int flag)
         {
-            if (id != libraryUserRegistrationRequest.RequestId)
+            var request = await _context.Request.FirstOrDefaultAsync(a => a.RequestId == id);
+            if (request == null || flag == 0)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(libraryUserRegistrationRequest).State = EntityState.Modified;
+            string adminId = null;
+            var claims = User.Claims;
+            if (claims != null)
+            {
+                adminId = claims.FirstOrDefault(x => x.Type == "AdminId").Value;
+            }
 
             try
             {
-                await _context.SaveChangesAsync();
+                var result = _context.Database.
+                            ExecuteSqlCommand(
+                           "[dbo].[InitiateLibraryUserAccount] @userRequestId = {0}, @adminId = {1}",
+                           request.RequestId,
+                           adminId
+                           );
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!LibraryUserRegistrationRequestExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
-
             return NoContent();
         }
 

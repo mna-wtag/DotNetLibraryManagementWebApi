@@ -23,7 +23,8 @@ namespace DotNetLibraryManagementWebApi.Controllers
 
         // GET: api/Authors
         [HttpGet]
-       // [Authorize]
+
+        // [Authorize(Roles ="Admin,SuperAdmin,UpdateAdmin")]
         public async Task<ActionResult<IEnumerable<Author>>> GetAuthor()
         {
             var author = _context.Author.Include(a => a.Book);
