@@ -13,7 +13,6 @@ namespace DotNetLibraryManagementWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class LibraryUserRegistrationRequestsController : ControllerBase
     {
         private readonly LibraryManagementContext _context;
