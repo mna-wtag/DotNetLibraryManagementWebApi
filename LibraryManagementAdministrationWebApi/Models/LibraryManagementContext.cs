@@ -29,7 +29,7 @@ namespace DotNetLibraryManagementWebApi.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=DESKTOP-CAG5V9G;Database=LibraryManagement;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-R6R934N;Database=LibraryManagement;Trusted_Connection=True;");
             }
         }
 
@@ -38,7 +38,7 @@ namespace DotNetLibraryManagementWebApi.Models
             modelBuilder.Entity<AdminRole>(entity =>
             {
                 entity.HasKey(e => e.AdminLevel)
-                    .HasName("PK__AdminRol__413020C863D1AC9A");
+                    .HasName("PK__AdminRol__413020C896F20C25");
 
                 entity.Property(e => e.AdminLevel).ValueGeneratedNever();
 
@@ -52,7 +52,7 @@ namespace DotNetLibraryManagementWebApi.Models
             modelBuilder.Entity<Administrator>(entity =>
             {
                 entity.HasKey(e => e.AdminId)
-                    .HasName("PK__Administ__719FE488D6E37B9F");
+                    .HasName("PK__Administ__719FE4887EDC94EA");
 
                 entity.Property(e => e.AccountStatus)
                     .IsRequired()
@@ -96,7 +96,7 @@ namespace DotNetLibraryManagementWebApi.Models
                     .WithMany(p => p.Administrator)
                     .HasForeignKey(d => d.AdminLevel)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Administr__Admin__2DE6D218");
+                    .HasConstraintName("FK__Administr__Admin__5AEE82B9");
             });
 
             modelBuilder.Entity<Author>(entity =>
@@ -160,7 +160,7 @@ namespace DotNetLibraryManagementWebApi.Models
             modelBuilder.Entity<LibraryUser>(entity =>
             {
                 entity.HasKey(e => e.UserId)
-                    .HasName("PK__LibraryU__1788CC4CAAE28753");
+                    .HasName("PK__LibraryU__1788CC4C3BD38B25");
 
                 entity.Property(e => e.AccountStatus).HasMaxLength(100);
 
@@ -211,13 +211,13 @@ namespace DotNetLibraryManagementWebApi.Models
                 entity.HasOne(d => d.ApproverNavigation)
                     .WithMany(p => p.LibraryUser)
                     .HasForeignKey(d => d.Approver)
-                    .HasConstraintName("FK__LibraryUs__Appro__01142BA1");
+                    .HasConstraintName("FK__LibraryUs__Appro__34C8D9D1");
             });
 
             modelBuilder.Entity<LibraryUserRegistrationRequest>(entity =>
             {
                 entity.HasKey(e => e.RequestId)
-                    .HasName("PK__LibraryU__1788CC4C1C0845BA");
+                    .HasName("PK__LibraryU__33A8517A867EDF38");
 
                 entity.Property(e => e.ActivationCode)
                     .IsRequired()

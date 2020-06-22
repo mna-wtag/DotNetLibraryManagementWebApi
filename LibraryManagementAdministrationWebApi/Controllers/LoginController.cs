@@ -37,7 +37,7 @@ namespace DotNetLibraryManagementWebApi.Controllers
                 var adminPass = CryptoHelper.Hash(c.Upassword);
                 var nadmin = await _context.Administrator.FirstOrDefaultAsync(a => a.Uname == c.Uname);
                 var admin = await _context.Administrator.FirstOrDefaultAsync(
-                    a => string.Equals(a.Uname, c.Uname) && a.Upassword == CryptoHelper.Hash(c.Upassword));
+                    a => string.Equals(a.Uname, c.Uname) && a.Upassword == c.Upassword);
 
                 if (admin != null)
                  {
