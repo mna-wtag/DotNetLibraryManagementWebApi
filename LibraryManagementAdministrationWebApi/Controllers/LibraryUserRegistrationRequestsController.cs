@@ -52,8 +52,8 @@ namespace DotNetLibraryManagementWebApi.Controllers
         [Authorize(Roles = "Admin,SuperAdmin,UpdateAdmin")]
         public async Task<IActionResult> PutLibraryUserRegistrationRequest(int id, [FromBody] int flag)
         {
-            var request = await _context.Request.FirstOrDefaultAsync(a => a.RequestId == id);
-            if (request == null || flag == 0)
+            var request = await _context.LibraryUserRegistrationRequest.FirstOrDefaultAsync(a => a.RequestId == id);
+            if (request == null)
             {
                 return NotFound();
             }
@@ -65,19 +65,29 @@ namespace DotNetLibraryManagementWebApi.Controllers
                 adminId = claims.FirstOrDefault(x => x.Type == "AdminId").Value;
             }
 
-            try
+            if (flag == 1)
             {
-                var result = _context.Database.
-                            ExecuteSqlCommand(
-                           "[dbo].[InitiateLibraryUserAccount] @userRequestId = {0}, @adminId = {1}",
-                           request.RequestId,
-                           adminId
-                           );
+                try
+                {
+                    var result = _context.Database.
+                                ExecuteSqlCommand(
+                               "[dbo].[InitiateLibraryUserAccount] @userRequestId = {0}, @adminId = {1}",
+                               request.RequestId,
+                               adminId
+                               );
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
             }
-            catch (Exception ex)
+            else 
             {
-                throw;
+                request.UserRequestStatus = "Rejected";
+                await _context.SaveChangesAsync();
             }
+
+
             return NoContent();
         }
 
